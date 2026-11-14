@@ -1602,11 +1602,15 @@
     for (let i = 0; i < wells.length; i++) {
       const w = wells[i];
       const boost = 1 + w.pulse * 2.2;
+      const breathe = 1 + Math.sin(clock * 2.4 + i * 1.7) * 0.045;
+      const haloR = w.r * 0.9 * breathe;
+      const coreR = w.core * (1 + Math.sin(clock * 3.2 + i) * 0.1);
 
       /* influence boundary */
       ctx.save();
       ctx.strokeStyle = 'rgba(74,44,26,0.16)';
       ctx.lineWidth = 1.2;
+      ctx.lineDashOffset = -clock * 8;
       ctx.setLineDash([4, 10]);
       ctx.beginPath();
       ctx.arc(w.x, w.y, w.r, 0, TAU);
@@ -1614,7 +1618,7 @@
       ctx.restore();
 
       /* lensing halo */
-      const g = ctx.createRadialGradient(w.x, w.y, 3, w.x, w.y, w.r * 0.9);
+      const g = ctx.createRadialGradient(w.x, w.y, 3, w.x, w.y, haloR);
       g.addColorStop(0, 'rgba(42,24,13,0.98)');
       g.addColorStop(0.2, 'rgba(58,35,20,0.92)');
       g.addColorStop(0.42, 'rgba(109,58,34,0.52)');
@@ -1622,13 +1626,13 @@
       g.addColorStop(1, 'rgba(184,119,74,0)');
       ctx.fillStyle = g;
       ctx.beginPath();
-      ctx.arc(w.x, w.y, w.r * 0.9, 0, TAU);
+      ctx.arc(w.x, w.y, haloR, 0, TAU);
       ctx.fill();
 
       /* burrow rim */
       ctx.save();
       ctx.strokeStyle = 'rgba(255,227,130,0.35)';
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 2 + Math.sin(clock * 3 + i) * 0.4;
       ctx.beginPath();
       ctx.arc(w.x, w.y, w.r * 0.42, 0, TAU);
       ctx.stroke();
@@ -1662,7 +1666,7 @@
 
       /* core */
       ctx.beginPath();
-      ctx.arc(w.x, w.y, w.core, 0, TAU);
+      ctx.arc(w.x, w.y, coreR, 0, TAU);
       ctx.fillStyle = C.dark;
       ctx.fill();
       ctx.save();
