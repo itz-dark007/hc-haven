@@ -44,7 +44,7 @@
   const canvas = document.getElementById('game');
   const ctx = canvas.getContext('2d');
   const playerSprite = new Image();
-  playerSprite.src = 'player-rocket.svg';
+  playerSprite.src = 'Assets/ORPH-RKT.png';
 
   function fitCanvas() {
     const dpr = Math.min(2, window.devicePixelRatio || 1);
