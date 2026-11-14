@@ -184,7 +184,7 @@ kbd{
 .card-name{font-family:var(--display);font-size:1.6cqw;line-height:1}
 .card-desc{font-size:1.1cqw;line-height:1.45;color:var(--ink-soft)}
 .card-desc b{color:var(--ink)}
-.character-viewport{width:min(70cqw,680px);overflow-x:auto;overflow-y:visible;margin:1cqw 0 1.4cqw;padding:1.2cqw 0 1cqw;scroll-snap-type:x mandatory;scrollbar-width:none;cursor:grab}
+.character-viewport{width:min(70cqw,680px);overflow-x:auto;overflow-y:visible;margin:1cqw 0 1.4cqw;padding:1.2cqw 0 1cqw;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;cursor:grab}
 .character-viewport::-webkit-scrollbar{display:none}
 .character-viewport:active{cursor:grabbing}
 .character-grid{display:flex;gap:1.4cqw;width:max-content;padding:0 26cqw}

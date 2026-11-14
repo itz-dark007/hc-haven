@@ -1003,6 +1003,13 @@
     cards.forEach((card) => card.classList.toggle('is-center', card === closest));
   }
 
+  function characterCarouselGroupWidth() {
+    const cards = els.characterCards.querySelectorAll('.character-card');
+    const count = Object.keys(characterSprites).length;
+    if (cards.length < count * 2) return 0;
+    return cards[count].offsetLeft - cards[0].offsetLeft;
+  }
+
   function nudgeCharacterCarousel(direction) {
     const card = els.characterCards.querySelector('.character-card');
     if (!card) return;
@@ -1013,7 +1020,7 @@
   }
 
   els.characterViewport.addEventListener('scroll', () => {
-    const group = els.characterCards.scrollWidth / 3;
+    const group = characterCarouselGroupWidth();
     if (group && els.characterViewport.scrollLeft < group * 0.45) els.characterViewport.scrollLeft += group;
     else if (group && els.characterViewport.scrollLeft > group * 1.55) els.characterViewport.scrollLeft -= group;
     updateCharacterCenter();
