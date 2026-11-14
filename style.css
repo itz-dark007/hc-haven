@@ -263,15 +263,30 @@ body[data-mode="gameover"] .home-button{display:none}
   position:absolute;top:3cqw;right:3cqw;width:11cqw;height:11cqw;
   object-fit:contain;filter:drop-shadow(0 4px 0 rgba(74,44,26,.2));
 }
-.mobile-controls{display:none;position:absolute;z-index:31;inset:auto 0 2cqw;justify-content:space-between;align-items:center;padding:0 3cqw;pointer-events:none}
-body.touch-device[data-mode="playing"] .mobile-controls{display:flex}
-.joystick{position:relative;width:15cqw;height:15cqw;max-width:96px;max-height:96px;border-radius:50%;pointer-events:auto;touch-action:none;background:rgba(255,227,130,.72);border:3px solid var(--ink);box-shadow:0 5px 0 rgba(74,44,26,.28),inset 0 0 0 7px rgba(255,247,230,.65)}
+.mobile-controls{display:none;position:absolute;z-index:31;inset:0;pointer-events:none}
+body.touch-device[data-mode="playing"] .mobile-controls{display:block}
+.mobile-move-zone,.mobile-bounce-zone{position:absolute;top:0;bottom:0;touch-action:none;pointer-events:auto}
+.mobile-move-zone{left:0;width:58%}
+.mobile-bounce-zone{right:0;width:42%}
+.joystick{display:none;position:absolute;width:18vw;height:18vw;max-width:112px;max-height:112px;border-radius:50%;pointer-events:none;touch-action:none;background:rgba(255,227,130,.72);border:3px solid var(--ink);box-shadow:0 5px 0 rgba(74,44,26,.28),inset 0 0 0 7px rgba(255,247,230,.65)}
+.joystick.visible{display:block}
 .joystick::after{content:"";position:absolute;inset:23%;border:1.5px dashed rgba(74,44,26,.35);border-radius:50%}
 #joystick-knob{position:absolute;left:50%;top:50%;width:42%;height:42%;border-radius:50%;transform:translate(-50%,-50%);background:var(--orange);border:3px solid var(--ink);box-shadow:0 3px 0 rgba(74,44,26,.3);z-index:1}
-.bounce-button{pointer-events:auto;touch-action:none;width:15cqw;height:15cqw;max-width:96px;max-height:96px;border-radius:50%;font-family:var(--display);font-size:1.5cqw;color:#fff8ea;background:var(--orange);border:3px solid var(--ink);box-shadow:0 6px 0 var(--ink);text-shadow:0 2px 0 rgba(74,44,26,.3)}
+.bounce-button{position:absolute;right:5vw;bottom:12vh;pointer-events:auto;touch-action:none;width:18vw;height:18vw;max-width:112px;max-height:112px;border-radius:50%;font-family:var(--display);font-size:clamp(13px,3vw,24px);color:#fff8ea;background:var(--orange);border:3px solid var(--ink);box-shadow:0 6px 0 var(--ink);text-shadow:0 2px 0 rgba(74,44,26,.3)}
 .bounce-button:active{transform:translateY(4px);box-shadow:0 2px 0 var(--ink);background:var(--orange-deep)}
 .pause-actions{display:flex;gap:1.2cqw;align-items:center;margin-top:1.4cqw}
 .pause-actions .btn{min-width:9cqw}
 .btn.secondary{color:var(--ink);background:var(--butter)}
 .btn.secondary:hover{background:var(--yellow)}
 .hint{margin:1.3cqw 0 0;color:var(--ink-soft);font-size:1.02cqw;letter-spacing:.1em;text-transform:uppercase}
+@media (max-width:700px){
+  body{padding:0;overflow:hidden}
+  #stage{width:100vw;height:100dvh;aspect-ratio:auto;border-radius:0;border-width:3px}
+  .hud{padding:3vw;font-size:2.5vw}
+  .hud-left,.hud-right{padding:1.6vw;border-radius:11px}
+  .badge{font-size:2vw}.badge b{font-size:2.3vw}.stat span{font-size:1.7vw}.stat b{font-size:3.2vw}
+  .home-button{left:3vw;bottom:3vw;font-size:3vw;padding:1.5vw 3vw}
+  .mute{right:3vw;bottom:3vw;width:8vw;height:8vw;font-size:3.5vw}
+  .mobile-move-zone{width:60%}.mobile-bounce-zone{width:40%}
+  .bounce-button{right:7vw;bottom:13vh}
+}

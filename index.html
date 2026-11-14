@@ -34,8 +34,12 @@
   <button class="mute" id="mute" title="Toggle sound (M)" aria-label="Toggle sound">&#128266;</button>
   <button class="home-button" id="btn-home" title="Return home" aria-label="Return home">HOME</button>
   <div class="mobile-controls" aria-label="Mobile controls">
-    <div class="joystick" id="joystick" aria-label="Move joystick"><span id="joystick-knob"></span></div>
-    <button class="bounce-button" id="bounce-button" type="button" aria-label="Bounce back">BOUNCE</button>
+    <div class="mobile-move-zone" id="move-zone" aria-label="Touch left side to move">
+      <div class="joystick" id="joystick" aria-hidden="true"><span id="joystick-knob"></span></div>
+    </div>
+    <div class="mobile-bounce-zone" id="bounce-zone" aria-label="Touch right side to bounce">
+      <button class="bounce-button" id="bounce-button" type="button" aria-label="Bounce back">BOUNCE</button>
+    </div>
   </div>
 
   <section class="screen" id="screen-menu">
