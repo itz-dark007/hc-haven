@@ -1010,6 +1010,22 @@
     return cards[count].offsetLeft - cards[0].offsetLeft;
   }
 
+  function recycleCharacterCarousel(direction, group) {
+    const count = Object.keys(characterSprites).length;
+    const children = Array.from(els.characterCards.children);
+    if (children.length < count * 2) return;
+    const moving = direction > 0 ? children.slice(0, count) : children.slice(-count);
+    els.characterViewport.style.scrollBehavior = 'auto';
+    if (direction > 0) {
+      moving.forEach((card) => els.characterCards.appendChild(card));
+      els.characterViewport.scrollLeft -= group;
+    } else {
+      moving.reverse().forEach((card) => els.characterCards.insertBefore(card, els.characterCards.firstChild));
+      els.characterViewport.scrollLeft += group;
+    }
+    els.characterViewport.style.scrollBehavior = '';
+  }
+
   function nudgeCharacterCarousel(direction) {
     const card = els.characterCards.querySelector('.character-card');
     if (!card) return;
@@ -1021,8 +1037,8 @@
 
   els.characterViewport.addEventListener('scroll', () => {
     const group = characterCarouselGroupWidth();
-    if (group && els.characterViewport.scrollLeft < group * 0.45) els.characterViewport.scrollLeft += group;
-    else if (group && els.characterViewport.scrollLeft > group * 1.55) els.characterViewport.scrollLeft -= group;
+    if (group && els.characterViewport.scrollLeft < group * 0.45) recycleCharacterCarousel(-1, group);
+    else if (group && els.characterViewport.scrollLeft > group * 1.55) recycleCharacterCarousel(1, group);
     updateCharacterCenter();
   });
 
