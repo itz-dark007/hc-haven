@@ -1793,6 +1793,7 @@
   const touchDevice = window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
   document.body.classList.toggle('touch-device', touchDevice);
   const moveZone = document.getElementById('move-zone');
+  const bounceZone = document.getElementById('bounce-zone');
   const joystick = document.getElementById('joystick');
   const joystickKnob = document.getElementById('joystick-knob');
   let joystickPointer = null;
@@ -1833,6 +1834,17 @@
   moveZone.addEventListener('pointermove', moveJoystick);
   moveZone.addEventListener('pointerup', resetJoystick);
   moveZone.addEventListener('pointercancel', resetJoystick);
+  const bounceButton = document.getElementById('bounce-button');
+  bounceButton.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    tryShield();
+  });
+  bounceZone.addEventListener('pointerdown', (e) => {
+    if (e.target !== bounceButton) {
+      e.preventDefault();
+      tryShield();
+    }
+  });
 
   canvas.addEventListener('pointerdown', (e) => {
     e.preventDefault();
