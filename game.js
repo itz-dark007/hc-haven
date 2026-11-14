@@ -220,7 +220,7 @@
     chickenUfo: {
       key: 'chickenUfo', hp: 68, speed: 82, r: 20, preferred: 270,
       bulletSpeed: 205, dmg: 10, xp: 16, score: 30, fire: [1.8, 2.5], telegraph: 0.38,
-      burst: 1, shape: 'ufo', sprite: 'chicken-ufo', color: '#e58a22', weight: 4, unlock: 42,
+      burst: 1, shape: 'ufo', sprite: 'chicken-ufo', color: '#e58a22', weight: 5, unlock: 0,
     },
   };
 
