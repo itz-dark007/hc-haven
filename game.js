@@ -961,9 +961,12 @@
         card.type = 'button';
         card.dataset.character = key;
         card.className = 'character-card';
-        card.innerHTML = '<img src="' + character.src + '" alt="">' +
+        card.innerHTML = '<div class="character-card-top"><span>CREATURE</span><b>HP 100</b></div>' +
+          '<img src="' + character.src + '" alt="">' +
           '<strong>' + character.name + '</strong>' +
-          '<span>' + (key === selectedCharacterKey ? 'selected' : 'play as this') + '</span>';
+          '<span class="character-card-type">' + (key === selectedCharacterKey ? 'selected' : 'playable') + '</span>' +
+          '<span class="character-card-rule"></span>' +
+          '<span>' + (key === selectedCharacterKey ? 'YOUR ACTIVE CARD' : 'CLICK TO CHOOSE') + '</span>';
         card.addEventListener('click', () => chooseCharacter(key));
         els.characterCards.appendChild(card);
       }
