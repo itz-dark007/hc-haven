@@ -48,7 +48,7 @@
   const dogRocketSprite = new Image();
   const hedgehogRocketSprite = new Image();
   const characterSprites = {
-    orph: { name: 'Orpheus', src: 'Assets/ORPH-RKT.png', image: playerSprite },
+    orph: { name: 'Orpheus', src: 'Assets/ORPH-RKT.webp', image: playerSprite },
     chicken: { name: 'Cluckie', src: 'Assets/Chicken-UFO-Color-SVG.png', image: chickenUfoSprite },
     dog: { name: 'Nova', src: 'Assets/Dog-Rocket-Coral-SVG.webp', image: dogRocketSprite },
     hedgehog: { name: 'Coco', src: 'Assets/Hedgehog-Rocket-SVG.png', image: hedgehogRocketSprite },
