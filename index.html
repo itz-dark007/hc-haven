@@ -32,8 +32,10 @@
   </div>
 
   <button class="mute" id="mute" title="Toggle sound (M)" aria-label="Toggle sound">&#128266;</button>
+  <button class="home-button" id="btn-home" title="Return home" aria-label="Return home">HOME</button>
 
   <section class="screen" id="screen-menu">
+    <img class="home-screen-flag" src="Assets/HC-Flag.webp" alt="Hack Club flag">
     <div class="menu-inner">
       <p class="jam-badge">Hack Club Haven · Game Jam 2026</p>
       <h1 class="title">KINETIC<span class="accent">DEFLECT</span></h1>
@@ -61,7 +63,10 @@
   <section class="screen hidden" id="screen-pause">
     <div class="menu-inner">
       <h2 class="lvl-title">PAUSED</h2>
-      <button class="btn primary" id="btn-resume">Resume</button>
+      <div class="pause-actions">
+        <button class="btn primary" id="btn-resume">Resume</button>
+        <button class="btn secondary" id="btn-pause-home">Home</button>
+      </div>
       <p class="hint"><kbd>esc</kbd> to resume</p>
     </div>
   </section>

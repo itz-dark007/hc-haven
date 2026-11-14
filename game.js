@@ -1008,6 +1008,12 @@
     els.best.textContent = state.best;
   }
 
+  function goHome() {
+    reset();
+    els.best.textContent = state.best;
+    setMode('menu');
+  }
+
   /* --------------------------------------------------------------- render */
   let clock = 0;
 
@@ -1627,6 +1633,8 @@
   document.getElementById('btn-play').addEventListener('click', startGame);
   document.getElementById('btn-retry').addEventListener('click', startGame);
   document.getElementById('btn-resume').addEventListener('click', () => setMode('playing'));
+  document.getElementById('btn-home').addEventListener('click', goHome);
+  document.getElementById('btn-pause-home').addEventListener('click', goHome);
   els.mute.addEventListener('click', toggleMute);
 
   els.best.textContent = state.best;
