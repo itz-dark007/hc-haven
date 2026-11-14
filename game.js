@@ -1194,7 +1194,8 @@
       ctx.save();
       ctx.translate(e.x, e.y);
       ctx.globalAlpha = alpha;
-      ctx.rotate(ang);
+      /* Keep the Chicken UFO upright instead of flipping toward the player. */
+      if (e.ty.sprite !== 'chicken-ufo') ctx.rotate(ang);
       if (e.ty.sprite === 'chicken-ufo' && chickenUfoSprite.complete && chickenUfoSprite.naturalWidth) {
         ctx.shadowColor = 'rgba(74,44,26,0.3)';
         ctx.shadowBlur = 7;
