@@ -980,16 +980,22 @@
     const middleCopyIndex = keys.length + keys.indexOf(key);
     const card = els.characterCards.querySelectorAll('.character-card')[middleCopyIndex] || cards[1] || cards[0];
     if (!card) return;
-    els.characterViewport.scrollLeft = card.offsetLeft - (els.characterViewport.clientWidth - card.offsetWidth) / 2;
+    const viewportRect = els.characterViewport.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+    const viewportCenter = viewportRect.left + viewportRect.width / 2;
+    const cardCenter = cardRect.left + cardRect.width / 2;
+    els.characterViewport.scrollLeft += cardCenter - viewportCenter;
     updateCharacterCenter();
   }
 
   function updateCharacterCenter() {
-    const center = els.characterViewport.scrollLeft + els.characterViewport.clientWidth / 2;
+    const viewportRect = els.characterViewport.getBoundingClientRect();
+    const center = viewportRect.left + viewportRect.width / 2;
     const cards = els.characterCards.querySelectorAll('.character-card');
     let closest = null, distance = Infinity;
     cards.forEach((card) => {
-      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+      const cardRect = card.getBoundingClientRect();
+      const cardCenter = cardRect.left + cardRect.width / 2;
       const distanceFromCenter = Math.abs(cardCenter - center);
       card.classList.toggle('is-center', distanceFromCenter < distance);
       if (distanceFromCenter < distance) { distance = distanceFromCenter; closest = card; }
