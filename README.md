@@ -22,6 +22,10 @@ python -m http.server 8000
 | `M` | Mute |
 | `R` | Retry (on the game-over screen) |
 
+## Character selection
+
+Before each run, choose one of the four available ships: ORPH-RKT, Chicken UFO, Dog-Rocket, or Hedgehog-Rocket. The selected ship becomes the player, while every other ship becomes an enemy. Enemy spawning prefers the least-represented available ship so crowded moments stay visually varied.
+
 ## How it plays
 
 - Enemies enter from the arena perimeter and **telegraph** a shot before firing. Bait the shot, then pulse at the last moment.

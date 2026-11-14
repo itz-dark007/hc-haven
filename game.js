@@ -44,11 +44,17 @@
   const canvas = document.getElementById('game');
   const ctx = canvas.getContext('2d');
   const playerSprite = new Image();
-  playerSprite.src = 'Assets/ORPH-RKT.png';
   const chickenUfoSprite = new Image();
-  chickenUfoSprite.src = 'Assets/Chicken-UFO-Color-SVG.png';
   const dogRocketSprite = new Image();
-  dogRocketSprite.src = 'Assets/Dog-Rocket-Coral-SVG.webp';
+  const hedgehogRocketSprite = new Image();
+  const characterSprites = {
+    orph: { name: 'ORPH-RKT', src: 'Assets/ORPH-RKT.png', image: playerSprite },
+    chicken: { name: 'Chicken UFO', src: 'Assets/Chicken-UFO-Color-SVG.png', image: chickenUfoSprite },
+    dog: { name: 'Dog-Rocket', src: 'Assets/Dog-Rocket-Coral-SVG.webp', image: dogRocketSprite },
+    hedgehog: { name: 'Hedgehog-Rocket', src: 'Assets/Hedgehog-Rocket-SVG.webp', image: hedgehogRocketSprite },
+  };
+  for (const key in characterSprites) characterSprites[key].image.src = characterSprites[key].src;
+  let selectedCharacterKey = 'orph';
 
   function fitCanvas() {
     const dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -190,7 +196,7 @@
     cards: $('cards'), best: $('menu-best'),
     overTime: $('over-time'), overScore: $('over-score'), overKills: $('over-kills'),
     overDeflects: $('over-deflects'), overLevel: $('over-level'), overBest: $('over-best'),
-    mute: $('mute'),
+    mute: $('mute'), characterCards: $('character-cards'),
   };
 
   /* --------------------------------------------------------- enemy types */
@@ -208,17 +214,17 @@
     burster: {
       key: 'burster', hp: 56, speed: 60, r: 17, preferred: 300,
       bulletSpeed: 225, dmg: 8, xp: 12, score: 22, fire: [2.0, 2.7], telegraph: 0.4,
-      burst: 3, shape: 'hex', color: '#a8b520', weight: 6, unlock: 34,
+      burst: 3, shape: 'ufo', sprite: 'hedgehog', color: '#d6604f', weight: 6, unlock: 34,
     },
     sniper: {
       key: 'sniper', hp: 40, speed: 54, r: 13, preferred: 355,
       bulletSpeed: 430, dmg: 14, xp: 13, score: 26, fire: [2.1, 2.9], telegraph: 0.8,
-      burst: 1, shape: 'star', color: '#9a6b3a', weight: 4, unlock: 58,
+      burst: 1, shape: 'ufo', sprite: 'orph', color: '#d9dce6', weight: 4, unlock: 58,
     },
     brute: {
       key: 'brute', hp: 175, speed: 44, r: 24, preferred: 175,
       bulletSpeed: 175, dmg: 16, xp: 24, score: 55, fire: [2.4, 3.2], telegraph: 0.5,
-      burst: 1, shape: 'square', color: '#6d3a22', weight: 2, unlock: 88,
+      burst: 1, shape: 'ufo', sprite: 'hedgehog', color: '#d6604f', weight: 2, unlock: 88,
     },
   };
 
@@ -484,6 +490,26 @@
     for (const k in TYPES) {
       const ty = TYPES[k];
       if (t >= ty.unlock) { opts.push(ty); total += ty.weight; }
+    }
+    const available = opts.filter((ty) => ty.sprite !== selectedCharacterKey);
+    if (available.length) {
+      opts.length = 0;
+      for (let i = 0; i < available.length; i++) opts.push(available[i]);
+      total = opts.reduce((sum, ty) => sum + ty.weight, 0);
+    }
+    /* Prefer the least represented sprite when several enemies are alive. */
+    if (opts.length > 1) {
+      let minimum = Infinity;
+      for (let i = 0; i < opts.length; i++) {
+        const count = enemies.reduce((n, e) => n + (!e.dead && e.ty.sprite === opts[i].sprite ? 1 : 0), 0);
+        minimum = Math.min(minimum, count);
+      }
+      const varied = opts.filter((ty) => enemies.reduce((n, e) => n + (!e.dead && e.ty.sprite === ty.sprite ? 1 : 0), 0) <= minimum);
+      if (varied.length) {
+        opts.length = 0;
+        for (let i = 0; i < varied.length; i++) opts.push(varied[i]);
+        total = opts.reduce((sum, ty) => sum + ty.weight, 0);
+      }
     }
     let roll = Math.random() * total;
     let ty = opts[0];
@@ -909,6 +935,7 @@
   /* -------------------------------------------------------------- screens */
   const SCREENS = {
     menu: 'screen-menu',
+    select: 'screen-select',
     levelup: 'screen-levelup',
     paused: 'screen-pause',
     gameover: 'screen-over',
@@ -920,6 +947,28 @@
     for (const k in SCREENS) {
       document.getElementById(SCREENS[k]).classList.toggle('hidden', m !== k);
     }
+  }
+
+  function openCharacterSelect() {
+    setMode('select');
+    els.characterCards.innerHTML = '';
+    for (const key in characterSprites) {
+      const character = characterSprites[key];
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'character-card';
+      card.innerHTML = '<img src="' + character.src + '" alt="">' +
+        '<strong>' + character.name + '</strong>' +
+        '<span>' + (key === selectedCharacterKey ? 'selected' : 'play as this') + '</span>';
+      card.addEventListener('click', () => chooseCharacter(key));
+      els.characterCards.appendChild(card);
+    }
+  }
+
+  function chooseCharacter(key) {
+    if (!characterSprites[key]) return;
+    selectedCharacterKey = key;
+    startGame();
   }
 
   let currentCards = [];
@@ -1213,7 +1262,7 @@
       ctx.globalAlpha = alpha;
       /* Keep image enemies upright instead of flipping toward the player. */
       if (!e.ty.sprite) ctx.rotate(ang);
-      const enemySprite = e.ty.sprite === 'dog-rocket' ? dogRocketSprite : chickenUfoSprite;
+      const enemySprite = e.ty.sprite ? characterSprites[e.ty.sprite].image : null;
       if (e.ty.sprite && enemySprite.complete && enemySprite.naturalWidth) {
         ctx.shadowColor = 'rgba(74,44,26,0.3)';
         ctx.shadowBlur = 7;
@@ -1408,10 +1457,11 @@
     ctx.shadowColor = 'rgba(74,44,26,0.35)';
     ctx.shadowBlur = 8;
     ctx.shadowOffsetY = 3;
-    if (playerSprite.complete && playerSprite.naturalWidth) {
+    const activePlayerSprite = characterSprites[selectedCharacterKey].image;
+    if (activePlayerSprite.complete && activePlayerSprite.naturalWidth) {
       const spriteH = 58;
-      const spriteW = spriteH * (playerSprite.naturalWidth / playerSprite.naturalHeight);
-      ctx.drawImage(playerSprite, -spriteW / 2, -spriteH / 2, spriteW, spriteH);
+      const spriteW = spriteH * (activePlayerSprite.naturalWidth / activePlayerSprite.naturalHeight);
+      ctx.drawImage(activePlayerSprite, -spriteW / 2, -spriteH / 2, spriteW, spriteH);
     }
     ctx.shadowBlur = 0;
     ctx.shadowOffsetY = 0;
@@ -1631,7 +1681,7 @@
     }
 
     if (state.mode === 'menu' && (e.code === 'Enter' || e.code === 'Space')) {
-      startGame();
+      openCharacterSelect();
       return;
     }
 
@@ -1669,7 +1719,8 @@
   }
 
   /* ------------------------------------------------------------- bootstrap */
-  document.getElementById('btn-play').addEventListener('click', startGame);
+  document.getElementById('btn-play').addEventListener('click', openCharacterSelect);
+  document.getElementById('btn-select-back').addEventListener('click', () => setMode('menu'));
   document.getElementById('btn-retry').addEventListener('click', startGame);
   document.getElementById('btn-resume').addEventListener('click', () => setMode('playing'));
   document.getElementById('btn-home').addEventListener('click', goHome);
