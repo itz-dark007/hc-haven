@@ -34,7 +34,7 @@ python -m http.server 8000
 
 Two black holes appear in randomly selected opposite quadrants, then slowly drift and randomly change direction during the run. Their pull reaches ~150 px and bends **every** projectile — hostile rounds curve on the way in, and your deflected shots curve on the way out. Anything that reaches the core is swallowed.
 
-They change the geometry of every reflect: line up the shot so gravity does the rest, or watch your kill shot spiral into the void instead. The wells are re-rolled at the start of each run.
+They change the geometry of every reflect: line up the shot so gravity does the rest, or watch your kill shot spiral into the void instead. Contact is dangerous too: the core deals **2 hull/sec**, tapering to **0.5 hull/sec** at the outer edge. The wells are re-rolled at the start of each run.
 
 The arena is deliberately sparse — the alive cap starts at 5 and only reaches 12 after several minutes, so each round you fire is readable and worth baiting.
 

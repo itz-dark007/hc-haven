@@ -396,6 +396,7 @@
   }
 
   function updateWells(dt) {
+    let playerWellDamage = 0;
     for (let i = 0; i < wells.length; i++) {
       const w = wells[i];
       if (w.pulse > 0) w.pulse = Math.max(0, w.pulse - dt);
@@ -421,12 +422,26 @@
         w.y = clamp(w.y, minY, maxY);
         w.vy *= -1;
       }
+
+      const playerDistance = Math.hypot(player.x - w.x, player.y - w.y);
+      if (playerDistance <= w.r) {
+        const damageRate = playerDistance <= w.core
+          ? 2
+          : lerp(0.5, 2, clamp(1 - playerDistance / w.r, 0, 1));
+        playerWellDamage = Math.max(playerWellDamage, damageRate);
+      }
       for (let k = 0; k < w.sparks.length; k++) {
         const s = w.sparks[k];
         s.a += s.s * dt * 0.55;
         s.d -= dt * 7;
         if (s.d < 22) { s.d = w.r * rand(0.7, 1.05); s.a = rand(0, TAU); }
       }
+    }
+
+    if (playerWellDamage > 0 && state.mode === 'playing') {
+      player.hp = Math.max(0, player.hp - playerWellDamage * dt);
+      state.flash = Math.max(state.flash, 0.025);
+      if (player.hp <= 0) gameOver();
     }
   }
 
