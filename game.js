@@ -992,6 +992,15 @@
     cards.forEach((card) => card.classList.toggle('is-center', card === closest));
   }
 
+  function nudgeCharacterCarousel(direction) {
+    const card = els.characterCards.querySelector('.character-card');
+    if (!card) return;
+    els.characterViewport.scrollBy({
+      left: direction * (card.offsetWidth + parseFloat(getComputedStyle(els.characterCards).gap || 0)),
+      behavior: 'smooth',
+    });
+  }
+
   els.characterViewport.addEventListener('scroll', () => {
     const group = els.characterCards.scrollWidth / 3;
     if (group && els.characterViewport.scrollLeft < group * 0.45) els.characterViewport.scrollLeft += group;
@@ -1700,6 +1709,17 @@
       if (e.code === 'Digit1' || e.code === 'Numpad1') pickCard(0);
       else if (e.code === 'Digit2' || e.code === 'Numpad2') pickCard(1);
       else if (e.code === 'Digit3' || e.code === 'Numpad3') pickCard(2);
+      return;
+    }
+
+    if (state.mode === 'select') {
+      if (e.code === 'KeyA' || e.code === 'KeyW' || e.code === 'ArrowLeft' || e.code === 'ArrowUp') {
+        e.preventDefault();
+        nudgeCharacterCarousel(-1);
+      } else if (e.code === 'KeyD' || e.code === 'KeyS' || e.code === 'ArrowRight' || e.code === 'ArrowDown') {
+        e.preventDefault();
+        nudgeCharacterCarousel(1);
+      }
       return;
     }
 
