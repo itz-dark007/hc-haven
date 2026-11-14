@@ -976,7 +976,9 @@
 
   function centerCharacterCarousel(key) {
     const cards = Array.from(els.characterCards.querySelectorAll('[data-character="' + key + '"]'));
-    const card = cards[1] || cards[0];
+    const keys = Object.keys(characterSprites);
+    const middleCopyIndex = keys.length + keys.indexOf(key);
+    const card = els.characterCards.querySelectorAll('.character-card')[middleCopyIndex] || cards[1] || cards[0];
     if (!card) return;
     els.characterViewport.scrollLeft = card.offsetLeft - (els.characterViewport.clientWidth - card.offsetWidth) / 2;
     updateCharacterCenter();
