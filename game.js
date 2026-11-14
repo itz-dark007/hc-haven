@@ -196,7 +196,7 @@
     cards: $('cards'), best: $('menu-best'),
     overTime: $('over-time'), overScore: $('over-score'), overKills: $('over-kills'),
     overDeflects: $('over-deflects'), overLevel: $('over-level'), overBest: $('over-best'),
-    mute: $('mute'), characterCards: $('character-cards'),
+    mute: $('mute'), characterCards: $('character-cards'), characterViewport: $('character-viewport'),
   };
 
   /* --------------------------------------------------------- enemy types */
@@ -348,7 +348,7 @@
     Sound.deflect();
   }
 
-  /* -------------------------------------------------------- gravity wells */
+  /* -------------------------------------------------------- black holes */
   function makeWells() {
     wells = [];
     const specs = [
@@ -953,18 +953,51 @@
   function openCharacterSelect() {
     setMode('select');
     els.characterCards.innerHTML = '';
-    for (const key in characterSprites) {
-      const character = characterSprites[key];
-      const card = document.createElement('button');
-      card.type = 'button';
-      card.className = 'character-card';
-      card.innerHTML = '<img src="' + character.src + '" alt="">' +
-        '<strong>' + character.name + '</strong>' +
-        '<span>' + (key === selectedCharacterKey ? 'selected' : 'play as this') + '</span>';
-      card.addEventListener('click', () => chooseCharacter(key));
-      els.characterCards.appendChild(card);
+    const keys = Object.keys(characterSprites);
+    for (let copy = 0; copy < 3; copy++) {
+      for (let i = 0; i < keys.length; i++) {
+        const key = keys[i], character = characterSprites[key];
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.dataset.character = key;
+        card.className = 'character-card';
+        card.innerHTML = '<img src="' + character.src + '" alt="">' +
+          '<strong>' + character.name + '</strong>' +
+          '<span>' + (key === selectedCharacterKey ? 'selected' : 'play as this') + '</span>';
+        card.addEventListener('click', () => chooseCharacter(key));
+        els.characterCards.appendChild(card);
+      }
     }
+    centerCharacterCarousel(selectedCharacterKey);
   }
+
+  function centerCharacterCarousel(key) {
+    const cards = Array.from(els.characterCards.querySelectorAll('[data-character="' + key + '"]'));
+    const card = cards[1] || cards[0];
+    if (!card) return;
+    els.characterViewport.scrollLeft = card.offsetLeft - (els.characterViewport.clientWidth - card.offsetWidth) / 2;
+    updateCharacterCenter();
+  }
+
+  function updateCharacterCenter() {
+    const center = els.characterViewport.scrollLeft + els.characterViewport.clientWidth / 2;
+    const cards = els.characterCards.querySelectorAll('.character-card');
+    let closest = null, distance = Infinity;
+    cards.forEach((card) => {
+      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+      const distanceFromCenter = Math.abs(cardCenter - center);
+      card.classList.toggle('is-center', distanceFromCenter < distance);
+      if (distanceFromCenter < distance) { distance = distanceFromCenter; closest = card; }
+    });
+    cards.forEach((card) => card.classList.toggle('is-center', card === closest));
+  }
+
+  els.characterViewport.addEventListener('scroll', () => {
+    const group = els.characterCards.scrollWidth / 3;
+    if (group && els.characterViewport.scrollLeft < group * 0.45) els.characterViewport.scrollLeft += group;
+    else if (group && els.characterViewport.scrollLeft > group * 1.55) els.characterViewport.scrollLeft -= group;
+    updateCharacterCenter();
+  });
 
   function chooseCharacter(key) {
     if (!characterSprites[key]) return;
