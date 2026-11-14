@@ -45,6 +45,8 @@
   const ctx = canvas.getContext('2d');
   const playerSprite = new Image();
   playerSprite.src = 'Assets/ORPH-RKT.png';
+  const chickenUfoSprite = new Image();
+  chickenUfoSprite.src = 'Assets/Chicken-UFO-Color-SVG.png';
 
   function fitCanvas() {
     const dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -214,6 +216,11 @@
       key: 'brute', hp: 175, speed: 44, r: 24, preferred: 175,
       bulletSpeed: 175, dmg: 16, xp: 24, score: 55, fire: [2.4, 3.2], telegraph: 0.5,
       burst: 1, shape: 'square', color: '#6d3a22', weight: 2, unlock: 88,
+    },
+    chickenUfo: {
+      key: 'chickenUfo', hp: 68, speed: 82, r: 20, preferred: 270,
+      bulletSpeed: 205, dmg: 10, xp: 16, score: 30, fire: [1.8, 2.5], telegraph: 0.38,
+      burst: 1, shape: 'ufo', sprite: 'chicken-ufo', color: '#e58a22', weight: 4, unlock: 42,
     },
   };
 
@@ -1160,6 +1167,16 @@
       ctx.translate(e.x, e.y);
       ctx.globalAlpha = alpha;
       ctx.rotate(ang);
+      if (e.ty.sprite === 'chicken-ufo' && chickenUfoSprite.complete && chickenUfoSprite.naturalWidth) {
+        ctx.shadowColor = 'rgba(74,44,26,0.3)';
+        ctx.shadowBlur = 7;
+        ctx.shadowOffsetY = 2;
+        const spriteW = e.r * 3.05;
+        const spriteH = spriteW * chickenUfoSprite.naturalHeight / chickenUfoSprite.naturalWidth;
+        ctx.drawImage(chickenUfoSprite, -spriteW / 2, -spriteH / 2, spriteW, spriteH);
+        /* Skip the geometric enemy shape below; keep its normal HP bar. */
+        ctx.globalAlpha = 0;
+      }
       ctx.fillStyle = col;
       ctx.beginPath();
 
@@ -1338,7 +1355,7 @@
     ctx.globalAlpha = blink ? 0.4 : 1;
     ctx.translate(p.x, p.y);
     const sp = Math.hypot(p.vx, p.vy);
-    if (sp > 20) ctx.rotate(Math.atan2(p.vy, p.vx) + Math.PI / 2);
+    /* Keep ORPH-RKT upright and visually basic while moving. */
     ctx.shadowColor = 'rgba(74,44,26,0.35)';
     ctx.shadowBlur = 8;
     ctx.shadowOffsetY = 3;

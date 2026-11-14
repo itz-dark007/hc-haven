@@ -45,6 +45,7 @@ The arena is deliberately sparse — the alive cap starts at 5 and only reaches 
 | Grunt | start | Keeper of range, single aimed shot |
 | Weaver | 16 s | Fast, strafes wildly, leads its shots |
 | Burster | 34 s | Fires 3-round bursts |
+| Chicken UFO | 42 s | Colorful UFO enemy with a steady aimed shot |
 | Sniper | 58 s | Long telegraph, very fast round |
 | Brute | 88 s | Tanky, slow, heavy projectile |
 
