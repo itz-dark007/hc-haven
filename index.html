@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bounce Back — Haven Game Jam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&family=Jua&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>&#128737;</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-mode="menu">
+<main id="stage">
+  <canvas id="game" width="960" height="600" aria-label="Bounce Back arena"></canvas>
+
+  <div class="hud" aria-hidden="true">
+    <div class="hud-left">
+      <div class="hud-line">
+        <span class="badge">LV <b id="hud-level">1</b></span>
+        <span class="xp-text" id="hud-xp-text">0 / 14 XP</span>
+      </div>
+      <div class="bar xp"><i id="hud-xp"></i></div>
+      <div class="bar hp"><i id="hud-hp"></i><span id="hud-hp-text">100</span></div>
+    </div>
+    <div class="hud-right">
+      <div class="stat"><span>TIME</span><b id="hud-time">0:00</b></div>
+      <div class="stat"><span>SCORE</span><b id="hud-score">0</b></div>
+      <div class="stat"><span>KILLS</span><b id="hud-kills">0</b></div>
+    </div>
+  </div>
+
+  <button class="mute" id="mute" title="Toggle sound (M)" aria-label="Toggle sound">&#128266;</button>
+
+  <section class="screen" id="screen-menu">
+    <div class="menu-inner">
+      <p class="jam-badge">Hack Club Haven · Game Jam 2026</p>
+      <h1 class="title">BOUNCE<span class="accent">BACK</span></h1>
+      <p class="tagline">You carry no weapon. Every shot you survive becomes one.</p>
+      <div class="controls">
+        <div><span class="keys"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><em>move</em></div>
+        <div><span class="keys"><kbd>SPACE</kbd><kbd>or click</kbd></span><em>shield pulse</em></div>
+        <div><span class="keys"><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd></span><em>choose upgrade</em></div>
+      </div>
+      <button class="btn primary" id="btn-play">Enter the arena</button>
+      <p class="best">best score <b id="menu-best">0</b></p>
+      <p class="menu-note">Gravity wells bend incoming fire <em>and</em> your reflections.</p>
+    </div>
+  </section>
+
+  <section class="screen hidden" id="screen-levelup">
+    <div class="levelup-inner">
+      <h2 class="lvl-title">LEVEL UP</h2>
+      <p class="lvl-sub">Sharpen the bounce</p>
+      <div class="cards" id="cards"></div>
+      <p class="hint">press <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd></p>
+    </div>
+  </section>
+
+  <section class="screen hidden" id="screen-pause">
+    <div class="menu-inner">
+      <h2 class="lvl-title">PAUSED</h2>
+      <button class="btn primary" id="btn-resume">Resume</button>
+      <p class="hint"><kbd>esc</kbd> to resume</p>
+    </div>
+  </section>
+
+  <section class="screen hidden" id="screen-over">
+    <div class="over-inner">
+      <h2 class="over-title">YOU FELL</h2>
+      <p class="over-sub">The arena keeps what it catches.</p>
+      <div class="stats">
+        <div><span>survived</span><b id="over-time">0:00</b></div>
+        <div><span>score</span><b id="over-score">0</b></div>
+        <div><span>kills</span><b id="over-kills">0</b></div>
+        <div><span>deflects</span><b id="over-deflects">0</b></div>
+        <div><span>level</span><b id="over-level">1</b></div>
+        <div><span>best</span><b id="over-best">0</b></div>
+      </div>
+      <button class="btn primary" id="btn-retry">Bounce again</button>
+      <p class="hint">or press <kbd>R</kbd></p>
+    </div>
+  </section>
+</main>
+<script src="game.js"></script>
+</body>
+</html>
