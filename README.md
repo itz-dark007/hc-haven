@@ -1,4 +1,4 @@
-# Bounce Back
+# Kinetic Deflect
 
 A 2D arena survival game where you carry **no weapon**. Your only tool is a 360° shield pulse that lasts a fraction of a second. Fire it at the right moment and incoming bullets are reversed — and become yours.
 

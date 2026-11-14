@@ -1,5 +1,5 @@
 /* =========================================================================
-   BOUNCE BACK — arena survival
+   KINETIC DEFLECT — arena survival
    You have no weapon. Reflect enemy fire with a precisely-timed shield pulse.
    ========================================================================= */
 (() => {
