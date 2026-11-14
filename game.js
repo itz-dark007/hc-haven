@@ -204,12 +204,12 @@
     grunt: {
       key: 'grunt', hp: 40, speed: 76, r: 14, preferred: 235,
       bulletSpeed: 220, dmg: 9, xp: 8, score: 10, fire: [1.5, 2.2], telegraph: 0.32,
-      burst: 1, shape: 'ufo', sprite: 'chicken-ufo', color: '#e58a22', weight: 10, unlock: 0,
+      burst: 1, shape: 'ufo', sprite: 'chicken', color: '#e58a22', weight: 10, unlock: 0,
     },
     weaver: {
       key: 'weaver', hp: 32, speed: 126, r: 12, preferred: 195,
       bulletSpeed: 255, dmg: 7, xp: 9, score: 14, fire: [1.25, 1.8], telegraph: 0.24,
-      burst: 1, shape: 'ufo', sprite: 'dog-rocket', color: '#ee665e', weight: 7, unlock: 16,
+      burst: 1, shape: 'ufo', sprite: 'dog', color: '#ee665e', weight: 7, unlock: 16,
     },
     burster: {
       key: 'burster', hp: 56, speed: 60, r: 17, preferred: 300,
