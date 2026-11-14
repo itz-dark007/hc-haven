@@ -32,7 +32,7 @@ python -m http.server 8000
 
 ### Gravity wells
 
-Two black holes drift-anchor in opposite quadrants of the arena. Their pull reaches ~150 px and bends **every** projectile — hostile rounds curve on the way in, and your deflected shots curve on the way out. Anything that reaches the core is swallowed.
+Two black holes appear in randomly selected opposite quadrants, then slowly drift and randomly change direction during the run. Their pull reaches ~150 px and bends **every** projectile — hostile rounds curve on the way in, and your deflected shots curve on the way out. Anything that reaches the core is swallowed.
 
 They change the geometry of every reflect: line up the shot so gravity does the rest, or watch your kill shot spiral into the void instead. The wells are re-rolled at the start of each run.
 

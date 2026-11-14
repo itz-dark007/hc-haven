@@ -381,6 +381,9 @@
       wells.push({
         x: best.x, y: best.y, r: s.r, power: s.power, core: 15,
         spin: rand(0, TAU), pulse: 0, sparks: [],
+        vx: Math.cos(rand(0, TAU)) * rand(10, 22),
+        vy: Math.sin(rand(0, TAU)) * rand(10, 22),
+        shuffleT: rand(2.5, 5.5),
       });
     }
 
@@ -399,6 +402,28 @@
     for (let i = 0; i < wells.length; i++) {
       const w = wells[i];
       if (w.pulse > 0) w.pulse = Math.max(0, w.pulse - dt);
+      w.shuffleT -= dt;
+      if (w.shuffleT <= 0) {
+        const a = Math.atan2(w.vy, w.vx) + rand(-0.9, 0.9);
+        const speed = rand(10, 22);
+        w.vx = Math.cos(a) * speed;
+        w.vy = Math.sin(a) * speed;
+        w.shuffleT = rand(2.5, 5.5);
+      }
+      w.x += w.vx * dt;
+      w.y += w.vy * dt;
+      const minX = ARENA + w.r * 0.72;
+      const maxX = W - ARENA - w.r * 0.72;
+      const minY = ARENA + w.r * 0.72;
+      const maxY = H - ARENA - w.r * 0.72;
+      if (w.x < minX || w.x > maxX) {
+        w.x = clamp(w.x, minX, maxX);
+        w.vx *= -1;
+      }
+      if (w.y < minY || w.y > maxY) {
+        w.y = clamp(w.y, minY, maxY);
+        w.vy *= -1;
+      }
       for (let k = 0; k < w.sparks.length; k++) {
         const s = w.sparks[k];
         s.a += s.s * dt * 0.55;
