@@ -803,6 +803,7 @@
 
   /* -------------------------------------------------------- player logic */
   const keys = new Set();
+  const virtualMove = { x: 0, y: 0 };
 
   function tryShield() {
     if (state.mode !== 'playing') return;
@@ -832,6 +833,8 @@
     if (keys.has('KeyD') || keys.has('ArrowRight')) ix += 1;
     if (keys.has('KeyW') || keys.has('ArrowUp')) iy -= 1;
     if (keys.has('KeyS') || keys.has('ArrowDown')) iy += 1;
+    ix += virtualMove.x;
+    iy += virtualMove.y;
     if (ix || iy) {
       const m = Math.hypot(ix, iy);
       ix /= m; iy /= m;
@@ -1782,6 +1785,47 @@
   });
 
   window.addEventListener('keyup', (e) => keys.delete(e.code));
+
+  const touchDevice = window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
+  document.body.classList.toggle('touch-device', touchDevice);
+  const joystick = document.getElementById('joystick');
+  const joystickKnob = document.getElementById('joystick-knob');
+  let joystickPointer = null;
+
+  function resetJoystick() {
+    virtualMove.x = 0;
+    virtualMove.y = 0;
+    joystickKnob.style.transform = 'translate(-50%, -50%)';
+    joystickPointer = null;
+  }
+
+  function moveJoystick(e) {
+    if (e.pointerId !== joystickPointer) return;
+    const rect = joystick.getBoundingClientRect();
+    const max = rect.width * 0.3;
+    const dx = e.clientX - (rect.left + rect.width / 2);
+    const dy = e.clientY - (rect.top + rect.height / 2);
+    const length = Math.hypot(dx, dy) || 1;
+    const scale = Math.min(1, max / length);
+    const x = dx * scale, y = dy * scale;
+    virtualMove.x = x / max;
+    virtualMove.y = y / max;
+    joystickKnob.style.transform = 'translate(calc(-50% + ' + x + 'px), calc(-50% + ' + y + 'px))';
+  }
+
+  joystick.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    joystickPointer = e.pointerId;
+    joystick.setPointerCapture(e.pointerId);
+    moveJoystick(e);
+  });
+  joystick.addEventListener('pointermove', moveJoystick);
+  joystick.addEventListener('pointerup', resetJoystick);
+  joystick.addEventListener('pointercancel', resetJoystick);
+  document.getElementById('bounce-button').addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    tryShield();
+  });
 
   canvas.addEventListener('pointerdown', (e) => {
     e.preventDefault();

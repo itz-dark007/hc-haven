@@ -263,6 +263,13 @@ body[data-mode="gameover"] .home-button{display:none}
   position:absolute;top:3cqw;right:3cqw;width:11cqw;height:11cqw;
   object-fit:contain;filter:drop-shadow(0 4px 0 rgba(74,44,26,.2));
 }
+.mobile-controls{display:none;position:absolute;z-index:31;inset:auto 0 2cqw;justify-content:space-between;align-items:center;padding:0 3cqw;pointer-events:none}
+body.touch-device[data-mode="playing"] .mobile-controls{display:flex}
+.joystick{position:relative;width:15cqw;height:15cqw;max-width:96px;max-height:96px;border-radius:50%;pointer-events:auto;touch-action:none;background:rgba(255,227,130,.72);border:3px solid var(--ink);box-shadow:0 5px 0 rgba(74,44,26,.28),inset 0 0 0 7px rgba(255,247,230,.65)}
+.joystick::after{content:"";position:absolute;inset:23%;border:1.5px dashed rgba(74,44,26,.35);border-radius:50%}
+#joystick-knob{position:absolute;left:50%;top:50%;width:42%;height:42%;border-radius:50%;transform:translate(-50%,-50%);background:var(--orange);border:3px solid var(--ink);box-shadow:0 3px 0 rgba(74,44,26,.3);z-index:1}
+.bounce-button{pointer-events:auto;touch-action:none;width:15cqw;height:15cqw;max-width:96px;max-height:96px;border-radius:50%;font-family:var(--display);font-size:1.5cqw;color:#fff8ea;background:var(--orange);border:3px solid var(--ink);box-shadow:0 6px 0 var(--ink);text-shadow:0 2px 0 rgba(74,44,26,.3)}
+.bounce-button:active{transform:translateY(4px);box-shadow:0 2px 0 var(--ink);background:var(--orange-deep)}
 .pause-actions{display:flex;gap:1.2cqw;align-items:center;margin-top:1.4cqw}
 .pause-actions .btn{min-width:9cqw}
 .btn.secondary{color:var(--ink);background:var(--butter)}
