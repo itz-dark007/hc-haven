@@ -24,7 +24,7 @@ python -m http.server 8000
 
 ## Character selection
 
-Before each run, choose one of the four available ships: ORPH-RKT, Chicken UFO, Dog-Rocket, or Hedgehog-Rocket. The selected ship becomes the player, while every other ship becomes an enemy. Enemy spawning prefers the least-represented available ship so crowded moments stay visually varied.
+Before each run, choose one of the four available ships: Orpheus, Cluckie, Nova, or Coco. The selected ship becomes the player, while every other ship becomes an enemy. Enemy spawning prefers the least-represented available ship so crowded moments stay visually varied.
 
 ## How it plays
 
@@ -46,8 +46,8 @@ The arena is deliberately sparse — the alive cap starts at 5 and only reaches 
 
 | Type | Unlocks | Behaviour |
 | --- | --- | --- |
-| Chicken UFO | start | Keeper of range, single aimed shot |
-| Dog-Rocket | 16 s | Fast, strafes wildly, leads its shots |
+| Cluckie | start | Keeper of range, single aimed shot |
+| Nova | 16 s | Fast, strafes wildly, leads its shots |
 | Burster | 34 s | Fires 3-round bursts |
 | Sniper | 58 s | Long telegraph, very fast round |
 | Brute | 88 s | Tanky, slow, heavy projectile |
@@ -66,8 +66,8 @@ The arena is deliberately sparse — the alive cap starts at 5 and only reaches 
 
 ## Character selection
 
-Before each run, choose one of the available rocket characters: ORPH-RKT, Chicken UFO,
-Dog-Rocket, or Hedgehog-Rocket. The selected character is reserved for the player;
+Before each run, choose one of the available rocket characters: Orpheus, Cluckie,
+Nova, or Coco. The selected character is reserved for the player;
 every other character is eligible to appear as an enemy as it unlocks. Enemy spawning
 also favors the least-represented sprite when the arena gets crowded.
 

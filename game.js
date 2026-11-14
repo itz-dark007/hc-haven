@@ -48,10 +48,10 @@
   const dogRocketSprite = new Image();
   const hedgehogRocketSprite = new Image();
   const characterSprites = {
-    orph: { name: 'ORPH-RKT', src: 'Assets/ORPH-RKT.png', image: playerSprite },
-    chicken: { name: 'Chicken UFO', src: 'Assets/Chicken-UFO-Color-SVG.png', image: chickenUfoSprite },
-    dog: { name: 'Dog-Rocket', src: 'Assets/Dog-Rocket-Coral-SVG.webp', image: dogRocketSprite },
-    hedgehog: { name: 'Hedgehog-Rocket', src: 'Assets/Hedgehog-Rocket-SVG.webp', image: hedgehogRocketSprite },
+    orph: { name: 'Orpheus', src: 'Assets/ORPH-RKT.png', image: playerSprite },
+    chicken: { name: 'Cluckie', src: 'Assets/Chicken-UFO-Color-SVG.png', image: chickenUfoSprite },
+    dog: { name: 'Nova', src: 'Assets/Dog-Rocket-Coral-SVG.webp', image: dogRocketSprite },
+    hedgehog: { name: 'Coco', src: 'Assets/Hedgehog-Rocket-SVG.webp', image: hedgehogRocketSprite },
   };
   for (const key in characterSprites) characterSprites[key].image.src = characterSprites[key].src;
   let selectedCharacterKey = 'orph';
@@ -1451,7 +1451,7 @@
     ctx.globalAlpha = blink ? 0.4 : 1;
     ctx.translate(p.x, p.y);
     const sp = Math.hypot(p.vx, p.vy);
-    /* Rotate the static ORPH-RKT artwork toward movement; never animate it. */
+    /* Rotate the static Orpheus artwork toward movement; never animate it. */
     if (sp > 20) p.angle = Math.atan2(p.vy, p.vx) + Math.PI / 2;
     ctx.rotate(p.angle);
     ctx.shadowColor = 'rgba(74,44,26,0.35)';
