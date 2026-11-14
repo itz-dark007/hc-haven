@@ -47,7 +47,7 @@ The arena is deliberately sparse — the alive cap starts at 5 and only reaches 
 | Type | Unlocks | Behaviour |
 | --- | --- | --- |
 | Cluckie | start | Keeper of range, single aimed shot |
-| Nova | 16 s | Fast, strafes wildly, leads its shots |
+| Nova | start | Fast, strafes wildly, leads its shots |
 | Burster | 34 s | Fires 3-round bursts |
 | Sniper | 58 s | Long telegraph, very fast round |
 | Brute | 88 s | Tanky, slow, heavy projectile |

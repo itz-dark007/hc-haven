@@ -209,7 +209,7 @@
     weaver: {
       key: 'weaver', hp: 32, speed: 126, r: 12, preferred: 195,
       bulletSpeed: 255, dmg: 7, xp: 9, score: 14, fire: [1.25, 1.8], telegraph: 0.24,
-      burst: 1, shape: 'ufo', sprite: 'dog', color: '#ee665e', weight: 7, unlock: 16,
+      burst: 1, shape: 'ufo', sprite: 'dog', color: '#ee665e', weight: 7, unlock: 0,
     },
     burster: {
       key: 'burster', hp: 56, speed: 60, r: 17, preferred: 300,
@@ -492,11 +492,12 @@
       if (t >= ty.unlock) { opts.push(ty); total += ty.weight; }
     }
     const available = opts.filter((ty) => ty.sprite !== selectedCharacterKey);
-    if (available.length) {
-      opts.length = 0;
-      for (let i = 0; i < available.length; i++) opts.push(available[i]);
-      total = opts.reduce((sum, ty) => sum + ty.weight, 0);
-    }
+    /* Never spawn the player's selected character, even if it is the only
+       type unlocked at a given moment. */
+    if (!available.length) return false;
+    opts.length = 0;
+    for (let i = 0; i < available.length; i++) opts.push(available[i]);
+    total = opts.reduce((sum, ty) => sum + ty.weight, 0);
     /* Prefer the least represented sprite when several enemies are alive. */
     if (opts.length > 1) {
       let minimum = Infinity;
