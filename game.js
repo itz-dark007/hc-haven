@@ -149,6 +149,7 @@
 
   const player = {
     x: W / 2, y: H / 2, vx: 0, vy: 0, r: 13,
+    angle: 0,
     hp: 100, maxHp: 100,
     baseSpeed: 252,
     iT: 0,
@@ -974,6 +975,7 @@
 
     player.x = W / 2; player.y = H / 2;
     player.vx = 0; player.vy = 0;
+    player.angle = 0;
     player.hp = 100; player.maxHp = 100;
     player.iT = 0;
     player.shieldActive = false;
@@ -1355,7 +1357,9 @@
     ctx.globalAlpha = blink ? 0.4 : 1;
     ctx.translate(p.x, p.y);
     const sp = Math.hypot(p.vx, p.vy);
-    /* Keep ORPH-RKT upright and visually basic while moving. */
+    /* Rotate the static ORPH-RKT artwork toward movement; never animate it. */
+    if (sp > 20) p.angle = Math.atan2(p.vy, p.vx) + Math.PI / 2;
+    ctx.rotate(p.angle);
     ctx.shadowColor = 'rgba(74,44,26,0.35)';
     ctx.shadowBlur = 8;
     ctx.shadowOffsetY = 3;
@@ -1367,12 +1371,6 @@
     ctx.shadowBlur = 0;
     ctx.shadowOffsetY = 0;
 
-    if (sp > 20) {
-      ctx.fillStyle = C.ink;
-      ctx.beginPath();
-      ctx.arc(0, -4, 2.8, 0, TAU);
-      ctx.fill();
-    }
     ctx.restore();
   }
 
