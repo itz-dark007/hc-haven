@@ -47,6 +47,8 @@
   playerSprite.src = 'Assets/ORPH-RKT.png';
   const chickenUfoSprite = new Image();
   chickenUfoSprite.src = 'Assets/Chicken-UFO-Color-SVG.png';
+  const dogRocketSprite = new Image();
+  dogRocketSprite.src = 'Assets/Dog-Rocket-Coral-SVG.webp';
 
   function fitCanvas() {
     const dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -201,7 +203,7 @@
     weaver: {
       key: 'weaver', hp: 32, speed: 126, r: 12, preferred: 195,
       bulletSpeed: 255, dmg: 7, xp: 9, score: 14, fire: [1.25, 1.8], telegraph: 0.24,
-      burst: 1, shape: 'diamond', color: '#e09b00', weight: 7, unlock: 16,
+      burst: 1, shape: 'ufo', sprite: 'dog-rocket', color: '#ee665e', weight: 7, unlock: 16,
     },
     burster: {
       key: 'burster', hp: 56, speed: 60, r: 17, preferred: 300,
@@ -1194,15 +1196,16 @@
       ctx.save();
       ctx.translate(e.x, e.y);
       ctx.globalAlpha = alpha;
-      /* Keep the Chicken UFO upright instead of flipping toward the player. */
-      if (e.ty.sprite !== 'chicken-ufo') ctx.rotate(ang);
-      if (e.ty.sprite === 'chicken-ufo' && chickenUfoSprite.complete && chickenUfoSprite.naturalWidth) {
+      /* Keep image enemies upright instead of flipping toward the player. */
+      if (!e.ty.sprite) ctx.rotate(ang);
+      const enemySprite = e.ty.sprite === 'dog-rocket' ? dogRocketSprite : chickenUfoSprite;
+      if (e.ty.sprite && enemySprite.complete && enemySprite.naturalWidth) {
         ctx.shadowColor = 'rgba(74,44,26,0.3)';
         ctx.shadowBlur = 7;
         ctx.shadowOffsetY = 2;
         const spriteW = e.r * 3.05;
-        const spriteH = spriteW * chickenUfoSprite.naturalHeight / chickenUfoSprite.naturalWidth;
-        ctx.drawImage(chickenUfoSprite, -spriteW / 2, -spriteH / 2, spriteW, spriteH);
+        const spriteH = spriteW * enemySprite.naturalHeight / enemySprite.naturalWidth;
+        ctx.drawImage(enemySprite, -spriteW / 2, -spriteH / 2, spriteW, spriteH);
         /* Skip the geometric enemy shape below; keep its normal HP bar. */
         ctx.globalAlpha = 0;
       }
