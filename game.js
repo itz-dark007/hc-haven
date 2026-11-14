@@ -1734,7 +1734,8 @@
 
   /* debug / test hooks (handy in the console) */
   window.BounceBack = {
-    state, player, P, TYPES, wells: () => wells, makeWells,
+    state, player, P, TYPES, characterSprites, selectedCharacter: () => selectedCharacterKey,
+    wells: () => wells, makeWells,
     enemies: () => enemies,
     bullets: () => bullets,
     spawnEnemy, tryShield, startGame, setMode,

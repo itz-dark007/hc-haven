@@ -64,6 +64,13 @@ The arena is deliberately sparse — the alive cap starts at 5 and only reaches 
 - **Chain Pulse** — enemies killed by bounced shots explode.
 - **Patch Kit** — repeatable +35 hull.
 
+## Character selection
+
+Before each run, choose one of the available rocket characters: ORPH-RKT, Chicken UFO,
+Dog-Rocket, or Hedgehog-Rocket. The selected character is reserved for the player;
+every other character is eligible to appear as an enemy as it unlocks. Enemy spawning
+also favors the least-represented sprite when the arena gets crowded.
+
 ## Files
 
 | File | Purpose |
