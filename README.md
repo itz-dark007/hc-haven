@@ -2,14 +2,6 @@
 
 A 2D arena survival game where you carry **no weapon**. Your only tool is a 360° shield pulse that lasts a fraction of a second. Fire it at the right moment and incoming bullets are reversed — and become yours.
 
-## Run it
-
-No build step, no dependencies. Open `index.html` in a browser, or serve the folder:
-
-```bash
-python -m http.server 8000
-# then open http://localhost:8000
-```
 
 ## Controls
 
@@ -28,7 +20,7 @@ Before each run, choose one of the four available ships: Orpheus, Cluckie, Nova,
 
 ## How it plays
 
-- Enemies enter from the arena perimeter and **telegraph** a shot before firing. Bait the shot, then pulse at the last moment.
+- Enemies enter from the arena perimeter and **telegraph** a shot before firing. Bait the shot, then bounce at the last moment.
 - A deflected projectile becomes friendly: it reverses direction, damages enemies, and can ricochet off walls twice before expiring.
 - Get hit with the shield down and you lose hull. Enemies that touch you also hurt.
 - Kills grant XP. Each level pauses the arena and offers three modifiers.
