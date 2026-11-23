@@ -1030,7 +1030,10 @@
     const cardRect = card.getBoundingClientRect();
     const viewportCenter = viewportRect.left + viewportRect.width / 2;
     const cardCenter = cardRect.left + cardRect.width / 2;
+    const prevBehavior = els.characterViewport.style.scrollBehavior;
+    els.characterViewport.style.scrollBehavior = 'auto';
     els.characterViewport.scrollLeft += cardCenter - viewportCenter;
+    els.characterViewport.style.scrollBehavior = prevBehavior;
     updateCharacterCenter();
   }
 
