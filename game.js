@@ -327,12 +327,14 @@
         x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s,
         life: life * rand(0.7, 1.2), max: life, size: size * rand(0.6, 1.35),
         color, drag, gravity: o.gravity || 0,
+        seed: rand(0, TAU), angle: rand(0, TAU), shape: randInt(0, 2),
       });
     }
   }
 
   function addRing(x, y, r0, r1, color, life, width) {
-    rings.push({ x, y, r0, r1, life, max: life, color, width: width || 2 });
+    rings.push({ x, y, r0, r1, life, max: life, color, width: width || 2,
+      seed: rand(0, TAU), wobble: rand(0.92, 1.08), phase: rand(-0.12, 0.12) });
   }
 
   function addText(x, y, text, color, size) {
@@ -943,6 +945,9 @@
       if (p.life <= 0) continue;
       p.x += p.vx * dt;
       p.y += p.vy * dt;
+      p.x += Math.sin(clock * 5.3 + p.seed) * 3.2 * dt;
+      p.y += Math.cos(clock * 4.1 + p.seed * 0.7) * 2.1 * dt;
+      p.angle += (p.vx - p.vy) * 0.012 * dt;
       p.vy += p.gravity * dt;
       const damp = Math.exp(-p.drag * dt);
       p.vx *= damp;
@@ -1334,13 +1339,18 @@
     for (let i = 0; i < rings.length; i++) {
       const r = rings[i];
       const t = 1 - r.life / r.max;
-      const rad = lerp(r.r0, r.r1, easeOut(t));
-      ctx.globalAlpha = Math.max(0, 1 - t) * 0.9;
+      const organicT = t * t * (3 - 2 * t);
+      const rad = lerp(r.r0, r.r1, organicT);
+      ctx.globalAlpha = Math.max(0, 1 - t) * 0.82;
       ctx.strokeStyle = r.color;
-      ctx.lineWidth = r.width * (1 - t * 0.6);
-      ctx.beginPath();
-      ctx.arc(r.x, r.y, Math.max(1, rad), 0, TAU);
-      ctx.stroke();
+      ctx.lineWidth = r.width * (1 - organicT * 0.55);
+      const segments = 5;
+      for (let k = 0; k < segments; k++) {
+        const gap = r.phase + k * TAU / segments;
+        ctx.beginPath();
+        ctx.arc(r.x, r.y, Math.max(1, rad * r.wobble), gap, gap + TAU / segments * 0.62);
+        ctx.stroke();
+      }
     }
     ctx.restore();
   }
@@ -1352,9 +1362,22 @@
       const a = clamp(p.life / p.max, 0, 1);
       ctx.globalAlpha = a;
       ctx.fillStyle = p.color;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle);
+      const ps = p.size * (0.4 + a * 0.6);
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.size * (0.4 + a * 0.6), 0, TAU);
+      if (p.shape === 0) {
+        ctx.moveTo(-ps, 0);
+        ctx.quadraticCurveTo(0, -ps * 0.7, ps * 1.15, ps * 0.15);
+        ctx.quadraticCurveTo(ps * 0.15, ps * 0.9, -ps, 0);
+      } else if (p.shape === 1) {
+        ctx.rect(-ps * 0.45, -ps * 0.45, ps * 0.9, ps * 1.1);
+      } else {
+        ctx.arc(0, 0, ps * 0.72, 0, TAU);
+      }
       ctx.fill();
+      ctx.restore();
     }
     ctx.restore();
   }
@@ -1699,9 +1722,12 @@
       }
       for (let k = 0; k < w.sparks.length; k++) {
         const s = w.sparks[k];
-        const px = w.x + Math.cos(s.a) * s.d;
-        const py = w.y + Math.sin(s.a) * s.d;
-        const fade = clamp((s.d - 20) / (w.r * 0.8), 0, 1);
+        const inward = 0.08 + ((clock * s.s * 0.025 + s.a * 0.1) % 0.38);
+        const sd = w.r * 0.28 + s.d * (1 - inward);
+        const sway = Math.sin(clock * s.s * 1.7 + s.a) * 3.5;
+        const px = w.x + Math.cos(s.a + clock * s.s * 0.015) * sd + sway;
+        const py = w.y + Math.sin(s.a + clock * s.s * 0.015) * sd;
+        const fade = clamp((sd - 20) / (w.r * 0.8), 0, 1);
         ctx.globalAlpha = 0.7 * fade;
         ctx.fillStyle = s.size > 1.4 ? C.butter : C.brownLight;
         ctx.beginPath();
