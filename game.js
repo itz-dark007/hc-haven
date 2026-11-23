@@ -6,7 +6,8 @@
   'use strict';
 
   const TAU = Math.PI * 2;
-  const W = 960, H = 600, ARENA = 24;
+  const BASE_W = 960, BASE_H = 600, ARENA = 24;
+  let W = BASE_W, H = BASE_H;
 
   /* Haven palette (hack club haven) */
   const C = {
@@ -56,16 +57,55 @@
   for (const key in characterSprites) characterSprites[key].image.src = characterSprites[key].src;
   let selectedCharacterKey = 'orph';
 
+  let worldReady = false;
+
+  /* The arena adapts to the screen's aspect ratio instead of stretching:
+     the shorter side stays at 600 world units, so entity sizes, speeds and
+     spawn distances feel the same on phones, tablets and desktops. */
   function fitCanvas() {
+    const rect = canvas.getBoundingClientRect();
+    const aspect = rect.height > 4 ? clamp(rect.width / rect.height, 0.4, 3) : BASE_W / BASE_H;
+    if (aspect >= 1) {
+      H = BASE_H;
+      W = Math.round(H * aspect);
+    } else {
+      W = BASE_W;
+      H = Math.round(W / aspect);
+    }
     const dpr = Math.min(2, window.devicePixelRatio || 1);
     canvas.width = Math.round(W * dpr);
     canvas.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
+    reflowWorld();
   }
+
+  function reflowWorld() {
+    if (!worldReady) return;
+    player.x = clamp(player.x, ARENA + player.r, W - ARENA - player.r);
+    player.y = clamp(player.y, ARENA + player.r, H - ARENA - player.r);
+    for (let i = 0; i < enemies.length; i++) {
+      const e = enemies[i];
+      e.x = clamp(e.x, ARENA + e.r, W - ARENA - e.r);
+      e.y = clamp(e.y, ARENA + e.r, H - ARENA - e.r);
+    }
+    for (let i = 0; i < bullets.length; i++) {
+      const b = bullets[i];
+      b.x = clamp(b.x, ARENA, W - ARENA);
+      b.y = clamp(b.y, ARENA, H - ARENA);
+    }
+    for (let i = 0; i < wells.length; i++) {
+      const w = wells[i];
+      w.x = clamp(w.x, ARENA + w.r * 0.72, W - ARENA - w.r * 0.72);
+      w.y = clamp(w.y, ARENA + w.r * 0.72, H - ARENA - w.r * 0.72);
+    }
+  }
+
   fitCanvas();
   window.addEventListener('resize', fitCanvas);
+  window.addEventListener('orientationchange', () => setTimeout(fitCanvas, 150));
+  if (window.ResizeObserver) new ResizeObserver(fitCanvas).observe(document.getElementById('stage'));
 
   /* --------------------------------------------------------------- audio */
   const Sound = (() => {
@@ -186,6 +226,9 @@
   let texts = [];
   let wells = [];
   let nextId = 1;
+
+  worldReady = true;
+  fitCanvas();
 
   /* ----------------------------------------------------------- DOM cache */
   const $ = (id) => document.getElementById(id);
