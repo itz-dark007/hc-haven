@@ -347,7 +347,10 @@
       x: 0, y: 0, vx: 0, vy: 0, r: 6, friendly: false, dmg: 9, life: 5,
       color: C.orange, pierce: 1, hit: null, homing: 0, target: null,
       wallBounce: 0, dead: false, cap: 0,
+      seed: rand(0, TAU), trail: [],
     }, o);
+    if (o && o.seed == null) b.seed = rand(0, TAU);
+    if (o && o.trail == null) b.trail = [];
     if (!b.cap) b.cap = Math.hypot(b.vx, b.vy) * 1.9;
     bullets.push(b);
   }
@@ -800,6 +803,9 @@
 
       b.x += b.vx * dt;
       b.y += b.vy * dt;
+
+      b.trail.push({ x: b.x, y: b.y });
+      if (b.trail.length > 7) b.trail.shift();
 
       /* walls */
       let hitWall = false;
@@ -1497,44 +1503,93 @@
     for (let i = 0; i < bullets.length; i++) {
       const b = bullets[i];
       if (b.dead) continue;
+
       const sp = Math.hypot(b.vx, b.vy) || 1;
-      const tx = b.x - (b.vx / sp) * (b.friendly ? 24 : 15);
-      const ty = b.y - (b.vy / sp) * (b.friendly ? 24 : 15);
+      const ux = b.vx / sp, uy = b.vy / sp;
+      const px = -uy, py = ux;
 
-      ctx.globalAlpha = 0.5;
-      ctx.strokeStyle = b.color;
-      ctx.lineWidth = b.r * 1.3;
-      ctx.beginPath();
-      ctx.moveTo(tx, ty);
-      ctx.lineTo(b.x, b.y);
-      ctx.stroke();
+      /* segmented, hand-drawn coloured wake */
+      if (b.trail.length > 1) {
+        ctx.save();
+        ctx.globalAlpha = b.friendly ? 0.42 : 0.34;
+        ctx.strokeStyle = b.color;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        for (let k = 0; k < b.trail.length - 1; k++) {
+          const a = b.trail[k], z = b.trail[k + 1];
+          const offset = Math.sin(clock * 7 + b.seed + k * 1.7) * 0.8;
+          ctx.lineWidth = Math.max(1, b.r * (k + 1) / b.trail.length * 0.9);
+          ctx.beginPath();
+          ctx.moveTo(a.x + px * offset, a.y + py * offset);
+          ctx.lineTo(z.x - px * offset * 0.35, z.y - py * offset * 0.35);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
 
-      ctx.globalAlpha = 0.16;
+      ctx.save();
+      ctx.translate(b.x, b.y);
+      ctx.rotate(Math.atan2(uy, ux) + Math.sin(clock * 8 + b.seed) * 0.018);
+
+      const wobble = Math.sin(clock * 6.5 + b.seed) * 0.12;
+      const half = b.r * (0.92 + wobble);
+
+      ctx.globalAlpha = b.friendly ? 0.18 : 0.13;
       ctx.fillStyle = b.color;
       ctx.beginPath();
-      ctx.arc(b.x, b.y, b.r * 2.5, 0, TAU);
+      ctx.ellipse(-2, 0, b.r * 2.8, b.r * 1.75, 0.12, 0, TAU);
       ctx.fill();
 
       ctx.globalAlpha = 1;
-      ctx.fillStyle = 'rgba(255,247,230,0.95)';
+      ctx.fillStyle = C.paperLight;
       ctx.beginPath();
-      ctx.arc(b.x, b.y, b.r + 2.8, 0, TAU);
+      ctx.moveTo(b.r * 1.32, 0);
+      ctx.quadraticCurveTo(b.r * 0.72, -half * 1.25, -b.r * 0.35, -half);
+      ctx.quadraticCurveTo(-b.r * 1.12, -b.r * 0.48, -b.r * 0.92, b.r * 0.18);
+      ctx.quadraticCurveTo(-b.r * 0.65, half * 1.18, b.r * 0.55, half * 0.82);
+      ctx.quadraticCurveTo(b.r * 1.18, b.r * 0.46, b.r * 1.32, 0);
+      ctx.closePath();
       ctx.fill();
 
-      ctx.fillStyle = 'rgba(74,44,26,0.9)';
-      ctx.beginPath();
-      ctx.arc(b.x, b.y, b.r + 1.4, 0, TAU);
-      ctx.fill();
+      ctx.strokeStyle = C.ink;
+      ctx.lineWidth = 1.8;
+      ctx.stroke();
 
       ctx.fillStyle = b.color;
       ctx.beginPath();
-      ctx.arc(b.x, b.y, b.r, 0, TAU);
+      if (b.friendly) {
+        ctx.moveTo(b.r * 1.05, 0);
+        ctx.lineTo(-b.r * 0.15, -b.r * 0.72);
+        ctx.lineTo(-b.r * 0.72, -b.r * 0.15);
+        ctx.lineTo(-b.r * 0.52, b.r * 0.7);
+        ctx.lineTo(b.r * 0.42, b.r * 0.48);
+        ctx.closePath();
+      } else {
+        ctx.moveTo(b.r * 1.12, 0);
+        ctx.quadraticCurveTo(b.r * 0.45, -b.r * 0.78, -b.r * 0.58, -b.r * 0.72);
+        ctx.quadraticCurveTo(-b.r * 0.98, -b.r * 0.05, -b.r * 0.5, b.r * 0.74);
+        ctx.quadraticCurveTo(b.r * 0.38, b.r * 0.66, b.r * 1.12, 0);
+      }
       ctx.fill();
 
-      ctx.fillStyle = '#fffaf0';
+      ctx.fillStyle = C.paperLight;
+      ctx.globalAlpha = 0.82;
       ctx.beginPath();
-      ctx.arc(b.x - b.r * 0.14, b.y - b.r * 0.14, b.r * 0.4, 0, TAU);
+      ctx.ellipse(-b.r * 0.18, -b.r * 0.28, b.r * 0.32, b.r * 0.18, b.seed, 0, TAU);
       ctx.fill();
+      ctx.restore();
+
+      const tailX = b.x - ux * (b.friendly ? 25 : 18);
+      const tailY = b.y - uy * (b.friendly ? 25 : 18);
+      ctx.save();
+      ctx.globalAlpha = 0.28;
+      ctx.strokeStyle = b.friendly ? C.olive : C.inkSoft;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(tailX + px * b.r * 0.45, tailY + py * b.r * 0.45);
+      ctx.lineTo(b.x - ux * b.r * 0.2 + px * b.r * 0.25, b.y - uy * b.r * 0.2 + py * b.r * 0.25);
+      ctx.stroke();
+      ctx.restore();
     }
     ctx.restore();
   }
