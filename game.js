@@ -1868,6 +1868,7 @@
   }
 
   moveZone.addEventListener('pointerdown', (e) => {
+    if (joystickPointer !== null) return;
     e.preventDefault();
     joystickPointer = e.pointerId;
     joystickOrigin = { x: e.clientX, y: e.clientY };
@@ -1878,8 +1879,13 @@
     moveJoystick(e);
   });
   moveZone.addEventListener('pointermove', moveJoystick);
-  moveZone.addEventListener('pointerup', resetJoystick);
-  moveZone.addEventListener('pointercancel', resetJoystick);
+  function endJoystick(e) {
+    if (e.pointerId !== joystickPointer) return;
+    resetJoystick();
+  }
+  moveZone.addEventListener('pointerup', endJoystick);
+  moveZone.addEventListener('pointercancel', endJoystick);
+  window.addEventListener('blur', resetJoystick);
   const bounceButton = document.getElementById('bounce-button');
   bounceButton.addEventListener('pointerdown', (e) => {
     e.preventDefault();
@@ -1893,6 +1899,7 @@
   });
 
   canvas.addEventListener('pointerdown', (e) => {
+    if (state.mode !== 'playing') return;
     e.preventDefault();
     tryShield();
   });
