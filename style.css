@@ -131,7 +131,8 @@ body[data-mode="menu"] .hud,body[data-mode="select"] .hud,body[data-mode="gameov
 .title .accent{display:block;color:var(--olive)}
 @keyframes titleFloat{0%,100%{transform:rotate(-2deg) translateY(0)}38%{transform:rotate(-1.65deg) translateY(-.7cqw)}67%{transform:rotate(-2.22deg) translateY(.15cqw)}}
 .tagline{margin:1.8cqw 0 0;color:var(--ink-soft);font-size:clamp(13px,1.5cqw,18px);max-width:min(58cqw,520px)}
-.controls{display:flex;gap:clamp(12px,2.4cqw,28px);margin:2.2cqw 0 1.6cqw;flex-wrap:wrap;justify-content:center;font-size:clamp(11px,1.15cqw,14px);color:var(--ink-soft)}
+.controls{display:flex;gap:clamp(12px,2.4cqw,28px);margin:2.2cqw 0 .9cqw;flex-wrap:wrap;justify-content:center;font-size:clamp(11px,1.15cqw,14px);color:var(--ink-soft)}
+.controls-or{margin:.5cqw 0 0;font-family:var(--display);font-size:clamp(11px,1.15cqw,15px);letter-spacing:.26em;text-transform:uppercase;line-height:1;color:var(--orange-deep)}
 .controls>div{display:flex;align-items:center;gap:.7cqw}
 .controls em{font-style:normal;opacity:.9}
 .keys{display:flex;gap:.35cqw}
@@ -301,10 +302,8 @@ body.touch-device[data-mode="playing"] .mobile-controls{display:block}
 .btn.secondary{color:var(--ink);background:var(--butter)}
 .btn.secondary:hover{background:var(--yellow)}
 .hint{margin:1.3cqw 0 0;color:var(--ink-soft);font-size:clamp(10px,1.02cqw,12px);letter-spacing:.1em;text-transform:uppercase}
-.touch-hint{display:none;margin:1.1cqw 0 0;color:var(--ink-soft);font-size:clamp(11px,1.1cqw,14px);letter-spacing:.08em;text-transform:uppercase}
+.touch-hint{display:block;margin:.5cqw 0 0;color:var(--ink-soft);font-size:clamp(11px,1.1cqw,14px);letter-spacing:.08em;text-transform:uppercase}
 .touch-only{display:none}
-body.touch-device .touch-hint{display:block}
-body.touch-device .controls{display:none}
 body.touch-device .hint{display:none}
 body.touch-device .hint.touch-only{display:block}
 @media (max-width:820px), (max-height:560px){
